@@ -1,0 +1,94 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "description": "User email address" },
+        "displayName": { "type": "string", "description": "Display name of the user" },
+        "photoURL": { "type": "string", "description": "User avatar image URL" },
+        "createdAt": { "type": "string", "description": "ISO timestamp of account creation" },
+        "lastLoginAt": { "type": "string", "description": "ISO timestamp of last login" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Document": {
+      "title": "Document",
+      "description": "Study material document uploaded or pasted by the user",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique document ID" },
+        "user_id": { "type": "string", "description": "Owner user UID" },
+        "title": { "type": "string", "description": "Document title", "maxLength": 250 },
+        "raw_text": { "type": "string", "description": "Raw lecture notes or study material text", "maxLength": 100000 },
+        "created_at": { "type": "string", "description": "ISO creation timestamp" }
+      },
+      "required": ["id", "user_id", "title", "raw_text", "created_at"]
+    },
+    "Question": {
+      "title": "Question",
+      "description": "Flashcard or multiple-choice quiz question generated from document",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique question ID" },
+        "document_id": { "type": "string", "description": "Parent document ID" },
+        "user_id": { "type": "string", "description": "Owner user UID" },
+        "type": { "type": "string", "enum": ["flashcard", "multiple_choice"], "description": "Question format type" },
+        "content": { "type": "object", "description": "Question content (front/back or question/options/answer)" },
+        "topic": { "type": "string", "description": "Topic or subtopic category", "maxLength": 150 }
+      },
+      "required": ["id", "document_id", "user_id", "type", "content", "topic"]
+    },
+    "Progress": {
+      "title": "Progress",
+      "description": "Spaced repetition tracking progress for a question",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique progress ID" },
+        "user_id": { "type": "string", "description": "Owner user UID" },
+        "question_id": { "type": "string", "description": "Tracked question ID" },
+        "times_correct": { "type": "number", "description": "Count of correct attempts" },
+        "times_wrong": { "type": "number", "description": "Count of incorrect attempts" },
+        "next_review_at": { "type": "string", "description": "ISO timestamp for next spaced repetition review" }
+      },
+      "required": ["id", "user_id", "question_id", "times_correct", "times_wrong", "next_review_at"]
+    },
+    "ChatSession": {
+      "title": "ChatSession",
+      "description": "Socratic chat conversation history for a document",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique chat session ID" },
+        "document_id": { "type": "string", "description": "Associated document ID" },
+        "user_id": { "type": "string", "description": "Owner user UID" },
+        "messages": { "type": "array", "description": "Array of chat messages" },
+        "created_at": { "type": "string", "description": "ISO creation timestamp" }
+      },
+      "required": ["id", "document_id", "user_id", "messages", "created_at"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile collection"
+    },
+    "/documents/{documentId}": {
+      "schema": "Document",
+      "description": "User study materials and lecture documents"
+    },
+    "/questions/{questionId}": {
+      "schema": "Question",
+      "description": "Flashcards and quiz questions linked to documents"
+    },
+    "/progress/{progressId}": {
+      "schema": "Progress",
+      "description": "Spaced repetition learning progress"
+    },
+    "/chat_sessions/{chatSessionId}": {
+      "schema": "ChatSession",
+      "description": "Socratic dialogue sessions"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "חברותא חכמה | Chavruta Smart",
+  "description": "שותף לימוד חכם מבוסס AI בשיטת החברותא הסוקרטית לסטודנטים ותלמידים",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
